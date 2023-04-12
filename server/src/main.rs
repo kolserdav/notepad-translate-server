@@ -1,4 +1,8 @@
 // libretranslate --host 192.168.0.3  --api-keys --req-limit 100 --require-api-key-secret --disable-web-ui --threads 4
+mod prelude;
+
+use once_cell::sync::Lazy;
+use prelude::*;
 
 #[macro_use]
 extern crate log;
@@ -8,18 +12,21 @@ use axum::{
     Json, Router,
 };
 use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
+
+pub static LOCALES: Lazy<Vec<Locale>> = Lazy::new(|| get_translate_reviews());
 
 #[tokio::main]
 async fn main() {
     env_logger::builder().format_timestamp(None).init();
 
-    // build our application with a route
+    dotenv_init().expect(".env file not found");
+
     let app = Router::new()
         .route("/", get(root))
+        .route("/reviews", get(locales))
         .route("/users", post(create_user));
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = get_address();
 
     debug!("listening on {}", addr);
 
@@ -31,6 +38,17 @@ async fn main() {
 
 async fn root() -> &'static str {
     "Hello, World!"
+}
+
+async fn locales() -> (StatusCode, Json<Vec<&'static Locale>>) {
+    let locales = &LOCALES;
+
+    let mut result: Vec<&Locale> = vec![];
+    for locale in locales.iter() {
+        result.push(locale);
+    }
+
+    (StatusCode::OK, Json(result))
 }
 
 async fn create_user(Json(payload): Json<CreateUser>) -> (StatusCode, Json<User>) {
