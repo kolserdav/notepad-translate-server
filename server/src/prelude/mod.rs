@@ -30,10 +30,10 @@ pub fn get_address() -> SocketAddr {
     s
 }
 
-pub fn get_translate_reviews() -> Vec<Locale> {
+pub fn get_translate_reviews() -> Vec<LocaleReviews> {
     let dir = read_dir(LOCALES_PATH.clone()).expect("Failed read locales directory");
 
-    let mut res: Vec<Locale> = vec![];
+    let mut res: Vec<LocaleReviews> = vec![];
 
     for file in dir.collect::<Vec<Result<DirEntry, Error>>>() {
         let item_path = file.unwrap().path();
@@ -67,7 +67,7 @@ pub fn get_translate_reviews() -> Vec<Locale> {
         }
         let meta = meta_json.unwrap();
 
-        res.push(Locale {
+        res.push(LocaleReviews {
             code: item_path.file_name().unwrap().to_str().unwrap().to_string(),
             meta,
         });
@@ -82,7 +82,7 @@ pub struct LocaleMeta {
 }
 
 #[derive(Debug, Serialize)]
-pub struct Locale {
+pub struct LocaleReviews {
     pub code: String,
     pub meta: LocaleMeta,
 }
