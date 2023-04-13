@@ -1,5 +1,8 @@
 use super::Locale;
 
 pub static LANG: Locale = Locale {
-    translate: "перевод",
+    settings: "Настройки",
+    translate: "Перевод",
+    select_native: "Выбрать язык на котором говорю",
+    select_learn: "Выбрать язык который учу",
 };

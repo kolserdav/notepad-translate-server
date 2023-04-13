@@ -1,5 +1,5 @@
 {
   "python.analysis.typeCheckingMode": "basic",
   "editor.defaultFormatter": "rust-lang.rust-analyzer",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
 }

@@ -25,6 +25,6 @@ pub struct GetLocale {
 
 pub async fn get_locale_values(Query(payload): Query<GetLocale>) -> (StatusCode, Json<Locale>) {
     let locale = get_locale(payload.locale);
-
+    // std::thread::sleep(std::time::Duration::from_secs(55555555555));
     (StatusCode::OK, Json(locale))
 }
